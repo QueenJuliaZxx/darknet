@@ -225,15 +225,18 @@ void backward_detection_layer(const detection_layer l, network net)
 void get_detection_detections(layer l, int w, int h, float thresh, detection *dets)
 {
     int i,j,n;
+	#网络层l的输出就是预测值；
     float *predictions = l.output;
-    //int per_cell = 5*num+classes;
+    //int per_cell = 5*num+classes;  #5xanchor_num+80
+	#分割为sidexside的网格；
     for (i = 0; i < l.side*l.side; ++i){
-        int row = i / l.side;
-        int col = i % l.side;
-        for(n = 0; n < l.n; ++n){
+        int row = i / l.side;  #网格的行
+        int col = i % l.side;   #网格的列
+        for(n = 0; n < l.n; ++n){  #n：预测值（bx，by等等？？？）
             int index = i*l.n + n;
-            int p_index = l.side*l.side*l.classes + i*l.n + n;
+            int p_index = l.side*l.side*l.classes + i*l.n + n; #例如：13x13x80+每个网格预测n个..+n
             float scale = predictions[p_index];
+			#13x13x(80+n)+4x()???
             int box_index = l.side*l.side*(l.classes + l.n) + (i*l.n + n)*4;
             box b;
             b.x = (predictions[box_index + 0] + col) / l.side * w;
@@ -244,7 +247,7 @@ void get_detection_detections(layer l, int w, int h, float thresh, detection *de
             dets[index].objectness = scale;
             for(j = 0; j < l.classes; ++j){
                 int class_index = i*l.classes;
-                float prob = scale*predictions[class_index+j];
+                float prob = scale*predictions[class_index+j]; #第class_index+j个类的概率
                 dets[index].prob[j] = (prob > thresh) ? prob : 0;
             }
         }
