@@ -264,7 +264,7 @@ void validate_yolo_recall(char *cfg, char *weights)
 
 void test_yolo(char *cfgfile, char *weightfile, char *filename, float thresh)
 {
-    image **alphabet = load_alphabet();
+    image **alphabet = load_alphabet(); #用于在检测出来的图像上绘制字母（标签）
     network *net = load_network(cfgfile, weightfile, 0);
     layer l = net->layers[net->n-1];
     set_batch_network(net, 1);
