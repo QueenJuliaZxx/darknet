@@ -239,19 +239,23 @@ image **load_alphabet()
 void draw_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes)
 {
     int i,j;
-
+    #num是nbox
     for(i = 0; i < num; ++i){
+        #对于每个检测到的边界框，遍历一遍object类
         char labelstr[4096] = {0};
         int class = -1;
         for(j = 0; j < classes; ++j){
             if (dets[i].prob[j] > thresh){
+                #如果检测到的类只有一个
                 if (class < 0) {
                     strcat(labelstr, names[j]);
                     class = j;
                 } else {
+                    #多个类别连接
                     strcat(labelstr, ", ");
                     strcat(labelstr, names[j]);
                 }
+                #输出类别名：概率值
                 printf("%s: %.0f%%\n", names[j], dets[i].prob[j]*100);
             }
         }
