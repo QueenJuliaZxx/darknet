@@ -553,6 +553,7 @@ void fill_network_boxes(network *net, int w, int h, float thresh, float hier, in
             dets += l.w*l.h*l.n;
         }
         if(l.type == DETECTION){
+	    #在detection_layer.c里面
             get_detection_detections(l, w, h, thresh, dets);
             dets += l.w*l.h*l.n;
         }
