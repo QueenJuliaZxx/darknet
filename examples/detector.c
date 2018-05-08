@@ -334,6 +334,17 @@ void validate_detector_flip(char *datacfg, char *cfgfile, char *weightfile, char
             int w = val[t].w;
             int h = val[t].h;
             int num = 0;
+            #network.c  ：
+            #-------函数------------------------------
+            #detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num)
+            #   {
+            #      #封装在libdarknet.so里面
+            #      detection *dets = make_network_boxes(net, thresh, num);
+            #     #在network.c里面 
+            #     fill_network_boxes(net, w, h, thresh, hier, map, relative, dets);
+            #     return dets;
+            #}
+            #-------------------------------------
             detection *dets = get_network_boxes(net, w, h, thresh, .5, map, 0, &num);
             if (nms) do_nms_sort(dets, num, classes, nms);
             if (coco){
