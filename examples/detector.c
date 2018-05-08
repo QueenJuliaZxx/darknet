@@ -334,17 +334,7 @@ void validate_detector_flip(char *datacfg, char *cfgfile, char *weightfile, char
             int w = val[t].w;
             int h = val[t].h;
             int num = 0;
-            #network.c  ：
-            #-------函数------------------------------
-            #detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num)
-            #   {
-            #      #封装在libdarknet.so里面
-            #      detection *dets = make_network_boxes(net, thresh, num);
-            #     #在network.c里面 
-            #     fill_network_boxes(net, w, h, thresh, hier, map, relative, dets);
-            #     return dets;
-            #}
-            #-------------------------------------
+            
             detection *dets = get_network_boxes(net, w, h, thresh, .5, map, 0, &num);
             if (nms) do_nms_sort(dets, num, classes, nms);
             if (coco){
@@ -609,6 +599,17 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         printf("%s: Predicted in %f seconds.\n", input, what_time_is_it_now()-time);
         int nboxes = 0;
         detection *dets = get_network_boxes(net, im.w, im.h, thresh, hier_thresh, 0, 1, &nboxes);
+        #network.c  ：
+            #-------函数------------------------------
+            #detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num)
+            #   {
+            #      #封装在libdarknet.so里面
+            #      detection *dets = make_network_boxes(net, thresh, num);
+            #     #在network.c里面 
+            #     fill_network_boxes(net, w, h, thresh, hier, map, relative, dets);
+            #     return dets;
+            #}
+            #-------------------------------------
         //printf("%d\n", nboxes);
         //if (nms) do_nms_obj(boxes, probs, l.w*l.h*l.n, l.classes, nms);
         if (nms) do_nms_sort(dets, nboxes, l.classes, nms);
